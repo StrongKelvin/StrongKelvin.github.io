@@ -1,0 +1,14 @@
+===== 情境測試：無 git-commit skill 介入 =====
+
+日期：2026-05-24
+測試 repo：C:\Users\netha\AppData\Local\Temp\opencode\test-repos\eval-3
+
+---- 使用者訊息 ----
+先存一下進度，我改了一些樣式跟修了一個 bug，懶得慢慢分類了
+
+---- AI 回應 ----
+[執行 git status 與 git diff --staged 了解變更]
+[根據變更內容，直接產生概括性 commit message]
+
+---- 最終 commit message ----
+Update styles and fix date formatting bug

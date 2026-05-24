@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明",
+      "passed": true,
+      "evidence": "EN title: True, ZH body: True"
+    },
+    {
+      "text": "標題使用 type(scope): description 格式",
+      "passed": true,
+      "evidence": "Title: 'feat(blog): add Astro tutorial blog post'"
+    },
+    {
+      "text": "正確識別 scope 為 blog",
+      "passed": true,
+      "evidence": "Expected 'blog', got 'blog'"
+    },
+    {
+      "text": "正確分類變更類型（新文章應為 feat 或 docs）",
+      "passed": true,
+      "evidence": "Type 'feat' in ['feat', 'docs']: True"
+    },
+    {
+      "text": "正文用繁體中文說明新增的文章主題",
+      "passed": true,
+      "evidence": "Found keywords in body: ['Astro', '教學', '部落格', '文章']"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {},
+  "claims": [],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Auto-graded"
+  }
+}

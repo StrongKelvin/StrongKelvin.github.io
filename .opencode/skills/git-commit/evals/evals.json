@@ -1,0 +1,26 @@
+{
+  "skill_name": "git-commit",
+  "evals": [
+    {
+      "id": 1,
+      "name": "修正導覽列連結與樣式",
+      "prompt": "幫我 commit 這個變更，我剛剛改了 Header 的導覽連結",
+      "expected_output": "產生的 commit message 應包含：\n1. 英文標題使用 feat(header) 或 fix(header)\n2. 繁體中文正文說明連結變更內容\n3. 採用 Conventional Commits 格式",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "新增部落格文章",
+      "prompt": "寫一下 commit message，我新增了一篇關於 Astro 教學的部落格文章",
+      "expected_output": "產生的 commit message 應包含：\n1. 英文標題使用 feat(blog) 或 docs\n2. 繁體中文正文說明新增文章的標題與主題\n3. 採用雙語並陳格式",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "模糊表述 - 存進度",
+      "prompt": "先存一下進度，我改了一些樣式跟修了一個 bug，懶得慢慢分類了",
+      "expected_output": "1. 先檢查 git status 了解變更\n2. 建議使用者分類或直接提交\n3. 使用者選擇直接提交時，產生合併的 commit message",
+      "files": []
+    }
+  ]
+}

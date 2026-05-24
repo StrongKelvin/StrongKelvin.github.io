@@ -1,0 +1,22 @@
+[
+  {"query": "幫我寫 commit message，剛剛改了 Header 的導覽列", "should_trigger": true},
+  {"query": "commit 一下，我把 about 頁面改好了", "should_trigger": true},
+  {"query": "我要提交程式碼，新增了一篇部落格文章", "should_trigger": true},
+  {"query": "先存一下進度，改了一些樣式", "should_trigger": true},
+  {"query": "記錄今天的變更，修正了日期排序的 bug", "should_trigger": true},
+  {"query": "做完這個功能了，幫我 commit 並 push", "should_trigger": true},
+  {"query": "git add 完了，幫我下個有意義的 commit message", "should_trigger": true},
+  {"query": "這個改動要怎麼寫 commit message 比較好？", "should_trigger": true},
+  {"query": "提交修正，footer 的連結壞了", "should_trigger": true},
+  {"query": "chore(deps): 更新相依套件——幫我寫個 commit", "should_trigger": true},
+  {"query": "git diff 一下，我想看改了什麼", "should_trigger": false},
+  {"query": "git log 幫我看最近的提交歷史", "should_trigger": false},
+  {"query": "幫我開一個新的 branch 來做這個功能", "should_trigger": false},
+  {"query": "rebase 到 main 分支", "should_trigger": false},
+  {"query": "我改壞了，幫我 restore 這個檔案", "should_trigger": false},
+  {"query": "git stash 一下我的變更", "should_trigger": false},
+  {"query": "幫我設定 git config user.name", "should_trigger": false},
+  {"query": "merge conflict 了怎麼辦？", "should_trigger": false},
+  {"query": "幫我產生 changelog 從上個版本到現在", "should_trigger": false},
+  {"query": "git push 失敗了，幫我看看為什麼", "should_trigger": false}
+]

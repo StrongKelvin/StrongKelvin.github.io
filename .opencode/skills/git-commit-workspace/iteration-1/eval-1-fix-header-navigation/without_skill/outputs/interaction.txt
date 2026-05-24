@@ -1,0 +1,19 @@
+=== 互動記錄 (Without git-commit skill) ===
+=== 測試情境：eval-1-fix-header-navigation ===
+
+使用者：幫我 commit 這個變更，我剛剛改了 Header 的導覽連結
+
+助理（opencode）：
+我先幫你查看目前的變更狀態。
+
+=== git status ===
+變更的檔案：src/Header.astro（已暫存）
+
+=== git diff --staged ===
+變更內容：在 Header 的導覽列中新增了一個 "Projects" 連結，位於 Blog 連結之後。
+原本只有 Home、About、Blog 三個連結，現在新增了 Projects。
+
+=== 建議的 commit message ===
+feat(header): 新增 Projects 導覽連結
+
+在 Header 導覽列中新增 Projects 頁面連結，讓使用者能夠直接導覽至專案頁面。

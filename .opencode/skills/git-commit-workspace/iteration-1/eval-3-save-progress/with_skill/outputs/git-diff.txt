@@ -1,0 +1,24 @@
+diff --git a/src/global.css b/src/global.css
+index 18ea460..6190083 100644
+--- a/src/global.css
++++ b/src/global.css
+@@ -1,2 +1,3 @@
+-body { font-family: sans-serif; color: #333; }
+-h1 { font-size: 2rem; }
++body { font-family: 'Inter', sans-serif; color: #222; line-height: 1.6; }
++h1 { font-size: 2.5rem; font-weight: 700; }
++h2 { font-size: 1.75rem; }
+diff --git a/src/utils.ts b/src/utils.ts
+index 8829a69..60a7791 100644
+--- a/src/utils.ts
++++ b/src/utils.ts
+@@ -1,3 +1,8 @@
+ export function formatDate(date: Date): string {
+-  return date.toISOString().split('T')[0]
++  const d = new Date(date)
++  if (isNaN(d.getTime())) return 'Invalid date'
++  const y = d.getFullYear()
++  const m = String(d.getMonth() + 1).padStart(2, '0')
++  const day = String(d.getDate()).padStart(2, '0')
++  return ${y}--
+ }

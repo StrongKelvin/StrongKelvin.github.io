@@ -1,0 +1,5 @@
+feat(blog): add Astro tutorial post for beginners
+
+新增 Astro 入門教學部落格文章
+frontmatter 包含 layout、title、pubDate、author、description、image 與 tags
+內容介紹 Astro 靜態網站產生器的核心優勢與 Islands 架構

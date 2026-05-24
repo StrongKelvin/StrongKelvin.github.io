@@ -1,0 +1,61 @@
+=== 使用者互動紀錄 ===
+日期：2026-05-24
+專案：StrongKelvin.github.io (test-repos/eval-2)
+skill：git-commit
+
+========================================
+[使用者]
+寫一下 commit message，我新增了一篇關於 Astro 教學的部落格文章
+
+[Assistant - 載入 git-commit skill 並執行步驟 1：了解當前狀態]
+
+我來看一下目前的變更狀態。
+
+已執行：
+  git status
+  git diff --staged --stat
+  git diff --staged
+
+========================================
+[步驟 2 & 3：分析變更並向使用者報告]
+
+我注意到你修改了這些檔案：
+- src/pages/posts/astro-tutorial.md（新增文章：Astro 入門教學）
+
+變更摘要：
+你新增了一篇部落格文章《Astro 入門教學》，內容涵蓋 Astro 靜態網站產生器的介紹、選擇 Astro 的原因（極快載入速度、支援多種 UI 框架、Islands 架構），以及完整的 frontmatter 設定（包含布局、標題、日期、作者、描述、封面圖片與標籤）。
+
+這篇文章位於 `src/pages/posts/` 目錄下，遵循專案既有的部落格文章規範。
+
+你希望 commit message 的重點放在哪裡？還是直接產生？
+
+========================================
+[使用者]
+直接產生即可
+
+========================================
+[步驟 4：產生 commit message]
+
+以下是產生的雙語 commit message：
+
+feat(blog): add Astro tutorial post for beginners
+
+新增 Astro 入門教學部落格文章
+frontmatter 包含 layout、title、pubDate、author、description、image 與 tags
+內容介紹 Astro 靜態網站產生器的核心優勢與 Islands 架構
+
+---
+
+這個 commit message 可以嗎？要直接提交還是需要修改？
+
+========================================
+[使用者]
+可以，直接提交
+
+[執行提交]
+git commit -m "feat(blog): add Astro tutorial post for beginners" -m "新增 Astro 入門教學部落格文章
+
+frontmatter 包含 layout、title、pubDate、author、description、image 與 tags
+內容介紹 Astro 靜態網站產生器的核心優勢與 Islands 架構"
+
+=== 互動結束 ===

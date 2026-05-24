@@ -1,0 +1,32 @@
+{
+  "eval_id": 3,
+  "eval_name": "save-progress",
+  "prompt": "Save my progress - I changed some styles and fixed a bug, too lazy to categorize them",
+  "assertions": [
+    {
+      "name": "bilingual-format",
+      "description": "Commit message has English Conventional Commits title and Chinese body",
+      "check": "Title is English, body is Traditional Chinese"
+    },
+    {
+      "name": "conventional-commits",
+      "description": "Title uses type(scope): description format",
+      "check": "Title follows Conventional Commits format with type and description"
+    },
+    {
+      "name": "lists-both-changes",
+      "description": "Body mentions both style update and bug fix",
+      "check": "Body includes descriptions related to style/global.css and formatDate/bug fix"
+    },
+    {
+      "name": "appropriate-type",
+      "description": "Mixed changes use appropriate type (e.g. chore or wip)",
+      "check": "Type is 'chore' or includes 'wip' or 'refactor'"
+    },
+    {
+      "name": "respects-user-intent",
+      "description": "Respects user's wish to not categorize separately",
+      "check": "Produces a single commit message without suggesting to split"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明",
+      "passed": true,
+      "evidence": "EN title: True, ZH body: True"
+    },
+    {
+      "text": "標題使用 type(scope): description 格式",
+      "passed": true,
+      "evidence": "Title: 'chore(wip): save progress on style updates and date validation fix'"
+    },
+    {
+      "text": "正文同時提及樣式更新和 bug 修正",
+      "passed": true,
+      "evidence": "Style: True, Bug fix: True"
+    },
+    {
+      "text": "混合變更使用合適的 type（如 chore 或 wip）",
+      "passed": true,
+      "evidence": "Type 'chore' in ['chore', 'refactor']: True"
+    },
+    {
+      "text": "尊重使用者不想分類的意願，不強制拆分 commit",
+      "passed": true,
+      "evidence": "No commit splitting suggested"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {},
+  "claims": [],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Auto-graded"
+  }
+}

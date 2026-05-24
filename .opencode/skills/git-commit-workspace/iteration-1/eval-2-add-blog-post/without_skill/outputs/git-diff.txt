@@ -1,0 +1,26 @@
+diff --git a/src/pages/posts/astro-tutorial.md b/src/pages/posts/astro-tutorial.md
+new file mode 100644
+index 0000000..de86fb5
+--- /dev/null
++++ b/src/pages/posts/astro-tutorial.md
+@@ -0,0 +1,20 @@
++---
++layout: ../../layouts/MarkdownPostLayout.astro
++title: Astro 入門教學
++pubDate: 2026-05-24
++author: StrongKelvin
++description: 從零開始學習 Astro 靜態網站產生器
++image:
++  url: https://example.com/astro-tutorial.jpg
++  alt: Astro 教學封面
++tags: ["astro", "tutorial"]
++---
++# Astro 入門教學
++
++Astro 是一個現代的靜態網站產生器...
++
++## 為什麼選擇 Astro
++
++- 極快的載入速度
++- 支援多種 UI 框架
++- Islands 架構

@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "skill_name": "git-commit",
+    "skill_path": ".opencode/skills/git-commit",
+    "executor_model": "opencode/big-pickle",
+    "timestamp": "2026-05-24T06:30:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 0,
+        "tokens": 0
+      },
+      "expectations": [
+        {"text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明", "passed": true, "evidence": "EN title: True, ZH body: True"},
+        {"text": "標題使用 type(scope): description 格式", "passed": true, "evidence": "Title: 'feat(header): add projects navigation link'"},
+        {"text": "正確識別 scope 為 header", "passed": true, "evidence": "Expected 'header', got 'header'"},
+        {"text": "正確分類變更類型（新增功能應為 feat）", "passed": true, "evidence": "Type 'feat' in ['feat']: True"},
+        {"text": "正文用繁體中文說明變更內容", "passed": true, "evidence": "Found keywords in body"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 0,
+        "tokens": 0
+      },
+      "expectations": [
+        {"text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明", "passed": true, "evidence": "EN title: True, ZH body: True"},
+        {"text": "標題使用 type(scope): description 格式", "passed": true, "evidence": "Title: 'feat(header): 新增 Projects 導覽連結'"},
+        {"text": "正確識別 scope 為 header", "passed": true, "evidence": "Expected 'header', got 'header'"},
+        {"text": "正確分類變更類型（新增功能應為 feat）", "passed": true, "evidence": "Type 'feat' in ['feat']: True"},
+        {"text": "正文用繁體中文說明變更內容", "passed": true, "evidence": "Found keywords in body"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 0,
+        "tokens": 0
+      },
+      "expectations": [
+        {"text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明", "passed": true, "evidence": "EN title: True, ZH body: True"},
+        {"text": "標題使用 type(scope): description 格式", "passed": true, "evidence": "Title: 'feat(blog): add Astro tutorial post for beginners'"},
+        {"text": "正確識別 scope 為 blog", "passed": true, "evidence": "Expected 'blog', got 'blog'"},
+        {"text": "正確分類變更類型（新文章應為 feat 或 docs）", "passed": true, "evidence": "Type 'feat' in ['feat', 'docs']: True"},
+        {"text": "正文用繁體中文說明新增的文章主題", "passed": true, "evidence": "Found keywords in body"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 0,
+        "tokens": 0
+      },
+      "expectations": [
+        {"text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明", "passed": true, "evidence": "EN title: True, ZH body: True"},
+        {"text": "標題使用 type(scope): description 格式", "passed": true, "evidence": "Title: 'feat(blog): add Astro tutorial blog post'"},
+        {"text": "正確識別 scope 為 blog", "passed": true, "evidence": "Expected 'blog', got 'blog'"},
+        {"text": "正確分類變更類型（新文章應為 feat 或 docs）", "passed": true, "evidence": "Type 'feat' in ['feat', 'docs']: True"},
+        {"text": "正文用繁體中文說明新增的文章主題", "passed": true, "evidence": "Found keywords in body"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 0,
+        "tokens": 0
+      },
+      "expectations": [
+        {"text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明", "passed": true, "evidence": "EN title: True, ZH body: True"},
+        {"text": "標題使用 type(scope): description 格式", "passed": true, "evidence": "Title: 'chore(wip): save progress on style updates and date validation fix'"},
+        {"text": "正文同時提及樣式更新和 bug 修正", "passed": true, "evidence": "Style: True, Bug fix: True"},
+        {"text": "混合變更使用合適的 type（如 chore 或 wip）", "passed": true, "evidence": "Type 'chore' in ['chore', 'refactor']: True"},
+        {"text": "尊重使用者不想分類的意願，不強制拆分 commit", "passed": true, "evidence": "No commit splitting suggested"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.4,
+        "passed": 2,
+        "failed": 3,
+        "total": 5,
+        "time_seconds": 0,
+        "tokens": 0
+      },
+      "expectations": [
+        {"text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明", "passed": false, "evidence": "EN title: False, ZH body: False"},
+        {"text": "標題使用 type(scope): description 格式", "passed": false, "evidence": "Bad format: 'Update styles and fix date formatting bug'"},
+        {"text": "正文同時提及樣式更新和 bug 修正", "passed": true, "evidence": "Style: True, Bug fix: True"},
+        {"text": "混合變更使用合適的 type（如 chore 或 wip）", "passed": false, "evidence": "Type 'none' in ['chore', 'refactor']: False"},
+        {"text": "尊重使用者不想分類的意願，不強制拆分 commit", "passed": true, "evidence": "No commit splitting suggested"}
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 0, "stddev": 0, "min": 0, "max": 0},
+      "tokens": {"mean": 0, "stddev": 0, "min": 0, "max": 0}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.8, "stddev": 0.2828, "min": 0.4, "max": 1.0},
+      "time_seconds": {"mean": 0, "stddev": 0, "min": 0, "max": 0},
+      "tokens": {"mean": 0, "stddev": 0, "min": 0, "max": 0}
+    },
+    "delta": {
+      "pass_rate": "+0.20",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "With skill 在所有測試中穩定產出雙語 Conventional Commits 格式",
+    "Without skill 在混合變更場景（eval 3）無法產出 Conventional Commits 格式",
+    "With skill 能正確分類 chore/feat/fix 等變更類型",
+    "With skill 在評估變更內容後向使用者報告，提供更好的互動體驗"
+  ]
+}

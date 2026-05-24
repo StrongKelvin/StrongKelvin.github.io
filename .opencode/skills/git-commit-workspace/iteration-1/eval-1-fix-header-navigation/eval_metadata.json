@@ -1,0 +1,32 @@
+{
+  "eval_id": 1,
+  "eval_name": "fix-header-navigation",
+  "prompt": "Commit these changes - I modified the Header navigation links",
+  "assertions": [
+    {
+      "name": "bilingual-format",
+      "description": "Commit message has English Conventional Commits title and Chinese body",
+      "check": "Title is English (type: description), body is Traditional Chinese"
+    },
+    {
+      "name": "conventional-commits",
+      "description": "Title uses type(scope): description format",
+      "check": "Title matches regex: ^[a-z]+\\\\([a-z]+\\\\): .+"
+    },
+    {
+      "name": "correct-scope",
+      "description": "Correctly identifies scope as header",
+      "check": "Commit message includes 'header' as scope"
+    },
+    {
+      "name": "correct-type",
+      "description": "Correctly categorizes change type (feat for new feature)",
+      "check": "Type is 'feat'"
+    },
+    {
+      "name": "meaningful-body",
+      "description": "Body explains changes in Traditional Chinese",
+      "check": "Body contains Chinese description related to Projects link"
+    }
+  ]
+}

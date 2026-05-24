@@ -1,0 +1,5 @@
+chore(wip): save progress on style updates and date validation fix
+
+更新全域樣式與修正 formatDate 的日期驗證邏輯
+- 字體改為 Inter，調整顏色與行高，擴充標題層級樣式
+- 在 formatDate 中加入日期驗證，防止傳入無效日期時回傳錯誤結果

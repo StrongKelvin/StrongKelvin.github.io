@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "Commit message 包含英文 Conventional Commits 標題與繁體中文正文說明",
+      "passed": true,
+      "evidence": "EN title: True, ZH body: True"
+    },
+    {
+      "text": "標題使用 type(scope): description 格式",
+      "passed": true,
+      "evidence": "Title: 'feat(header): 新增 Projects 導覽連結'"
+    },
+    {
+      "text": "正確識別 scope 為 header",
+      "passed": true,
+      "evidence": "Expected 'header', got 'header'"
+    },
+    {
+      "text": "正確分類變更類型（新增功能應為 feat）",
+      "passed": true,
+      "evidence": "Type 'feat' in ['feat']: True"
+    },
+    {
+      "text": "正文用繁體中文說明變更內容",
+      "passed": true,
+      "evidence": "Found keywords in body: ['Project', '導覽', '連結']"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {},
+  "claims": [],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Auto-graded"
+  }
+}

@@ -1,0 +1,81 @@
+=== Git Commit Skill 測試互動記錄 ===
+測試情境：eval-1-fix-header-navigation（with_skill）
+使用者意圖：「幫我 commit 這個變更，我剛剛改了 Header 的導覽連結」
+
+===== 步驟 1：了解當前狀態（執行 git status & git diff --staged）=====
+
+$ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   src/Header.astro
+
+$ git diff --staged --stat
+ src/Header.astro | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+$ git diff --staged
+diff --git a/src/Header.astro b/src/Header.astro
+index 5741e1d..ebdf5a1 100644
+--- a/src/Header.astro
++++ b/src/Header.astro
+@@ -6,6 +6,7 @@ title: Home
+   <nav>
+     <a href="/">Home</a>
+     <a href="/about">About</a>
+-    <a href="/blog">Blog</a>  
++    <a href="/blog">Blog</a>
++    <a href="/projects">Projects</a>
+   </nav>
+ </header>
+
+===== 步驟 2：分析變更 =====
+
+Assistant 分析：
+- 變更範圍：src/Header.astro（導覽列元件）
+- 變更類型：功能新增（feat）
+- 變更內容：
+  1. 在導覽列新增 <a href="/projects">Projects</a> 連結
+  2. 修正 Blog 連結行尾的多餘空白
+- 變更目的：擴充導覽列，新增 Projects 頁面入口
+
+===== 步驟 3：向使用者報告變更 =====
+
+Assistant:
+我注意到你修改了以下檔案：
+
+- src/Header.astro — 導覽列元件
+
+變更摘要：
+在導覽列新增了 Projects 頁面的連結，同時修正了 Blog 連結行尾的多餘空白。
+目前這個變更已經在暫存區（staged）了。
+
+你希望 commit 訊息的重點放在哪裡？還是直接產生？
+
+===== 步驟 4：使用者回覆 =====
+
+User:
+直接產生吧，重點就是新增 Projects 導覽連結。
+
+===== 步驟 5：產生 commit message =====
+
+Assistant 根據 skill 指引產生雙語 commit message：
+
+feat(header): add projects navigation link
+
+在導覽列新增 Projects 頁面的連結，擴充站點導覽功能
+同時移除 Blog 連結行尾的多餘空白
+
+===== 步驟 6：提交確認 =====
+
+Assistant:
+這個 commit message 可以嗎？要直接提交還是需要修改？
+
+User:
+可以，直接提交吧。
+
+Assistant:
+$ git commit -m "feat(header): add projects navigation link" -m "在導覽列新增 Projects 頁面的連結，擴充站點導覽功能
+同時移除 Blog 連結行尾的多餘空白"
+
+===== 提交完成 =====

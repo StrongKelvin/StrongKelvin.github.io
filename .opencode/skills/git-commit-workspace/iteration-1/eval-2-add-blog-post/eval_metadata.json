@@ -1,0 +1,32 @@
+{
+  "eval_id": 2,
+  "eval_name": "add-blog-post",
+  "prompt": "Write a commit message - I added a new blog post about Astro tutorial",
+  "assertions": [
+    {
+      "name": "bilingual-format",
+      "description": "Commit message has English Conventional Commits title and Chinese body",
+      "check": "Title is English, body is Traditional Chinese"
+    },
+    {
+      "name": "conventional-commits",
+      "description": "Title uses type(scope): description format",
+      "check": "Title matches regex: ^[a-z]+\\\\([a-z]+\\\\): .+"
+    },
+    {
+      "name": "correct-scope",
+      "description": "Correctly identifies scope as blog",
+      "check": "Commit message includes 'blog' as scope"
+    },
+    {
+      "name": "correct-type",
+      "description": "Correctly categorizes change type (feat or docs)",
+      "check": "Type is 'feat' or 'docs'"
+    },
+    {
+      "name": "meaningful-body",
+      "description": "Body describes the new blog post in Chinese",
+      "check": "Body contains Chinese description about the post topic"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+diff --git a/src/Header.astro b/src/Header.astro
+index 5741e1d..ebdf5a1 100644
+--- a/src/Header.astro
++++ b/src/Header.astro
+@@ -6,6 +6,7 @@ title: Home
+   <nav>
+     <a href="/">Home</a>
+     <a href="/about">About</a>
+-    <a href="/blog">Blog</a>  
++    <a href="/blog">Blog</a>
++    <a href="/projects">Projects</a>
+   </nav>
+ </header>

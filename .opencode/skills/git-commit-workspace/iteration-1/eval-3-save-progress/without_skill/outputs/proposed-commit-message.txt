@@ -1,0 +1,4 @@
+Update styles and fix date formatting bug
+
+- Refine global CSS: switch font to 'Inter', adjust colors, add line-height, increase h1 size with weight, add h2 style
+- Fix formatDate to validate input and use proper zero-padded formatting

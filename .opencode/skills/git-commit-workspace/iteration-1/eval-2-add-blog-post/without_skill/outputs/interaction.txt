@@ -1,0 +1,27 @@
+=== Git Commit Message 互動記錄 ===
+日期：2026-05-24
+情境：無 git-commit skill 輔助
+
+--- 使用者要求 ---
+使用者：寫一下 commit message，我新增了一篇關於 Astro 教學的部落格文章
+
+--- 執行動作 ---
+1. 執行 git status
+   -> 結果：On branch main，有一個新的 staged 檔案 src/pages/posts/astro-tutorial.md
+
+2. 執行 git diff --staged
+   -> 結果：新增了一篇 Astro 教學部落格文章，包含 frontmatter（title: Astro 入門教學, pubDate: 2026-05-24, author: StrongKelvin, tags: ["astro", "tutorial"]）及教學內容
+
+3. 執行 git log --oneline -5
+   -> 結果：只有一個 Initial commit
+
+--- 判斷依據 ---
+- 變更類型：新增檔案（部落格文章）
+- 變更內容：Astro 教學相關內容
+- 專案語言：繁體中文
+- 使用 Conventional Commits 格式
+
+--- 最終產生的 commit message ---
+feat(blog): add Astro tutorial blog post
+
+新增一篇 Astro 入門教學部落格文章，內容涵蓋 Astro 的基本概念與特色介紹。

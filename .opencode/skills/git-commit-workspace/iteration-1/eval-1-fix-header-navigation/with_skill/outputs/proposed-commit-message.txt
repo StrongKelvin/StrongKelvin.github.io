@@ -1,0 +1,4 @@
+feat(header): add projects navigation link
+
+在導覽列新增 Projects 頁面的連結，擴充站點導覽功能
+同時移除 Blog 連結行尾的多餘空白

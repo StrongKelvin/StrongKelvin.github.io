@@ -1,0 +1,35 @@
+=== 使用者與助理的完整對話 ===
+
+使用者：先存一下進度，我改了一些樣式跟修了一個 bug，懶得慢慢分類了
+
+助理：好的，我先看一下目前的變更狀態。
+
+執行 git status 與 git diff --staged 後，我注意到你修改了這兩個檔案：
+
+1. src/global.css（樣式更新）
+   - 字體從 sans-serif 改為 Inter
+   - 文字顏色從 #333 調整為 #222
+   - 新增 line-height: 1.6
+   - h1 字體大小從 2rem 擴大到 2.5rem，新增 font-weight: 700
+   - 新增 h2 樣式（font-size: 1.75rem）
+
+2. src/utils.ts（錯誤修正）
+   - formatDate 函數原本直接回傳 toISOString().split('T')[0]
+   - 現在加入了日期驗證（isNaN 檢查），避免無效日期造成錯誤
+   - 改用手動格式化年/月/日，搭配 padStart 補零
+
+你說懶得分類，那我就幫你合併成一個 commit。由於你提到「先存一下進度」，我會用 chore(wip) 類型來標示這是暫時性的進度儲存。
+
+產生的 commit message 如下：
+
+chore(wip): save progress on style updates and date validation fix
+
+更新全域樣式與修正 formatDate 的日期驗證邏輯
+- 字體改為 Inter，調整顏色與行高，擴充標題層級樣式
+- 在 formatDate 中加入日期驗證，防止傳入無效日期時回傳錯誤結果
+
+這個 commit message 可以嗎？要直接提交還是需要修改？
+
+使用者：可以，直接提交吧。
+
+助理：好的，已提交。
