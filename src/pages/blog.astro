@@ -1,33 +1,12 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-
-const postsModules = import.meta.glob('./posts/**/*.md', { eager: true });
-
-const postsByYear = {};
-for (const [filepath, post] of Object.entries(postsModules)) {
-  const year = filepath.match(/\/posts\/(\d{4})\//)?.[1];
-  const key = year ?? String(new Date(post.frontmatter.pubDate).getFullYear());
-  if (!postsByYear[key]) postsByYear[key] = [];
-  postsByYear[key].push(post);
-}
-
-const years = Object.keys(postsByYear).sort((a, b) => b - a);
-for (const year of years) {
-  postsByYear[year].sort((a, b) => new Date(b.frontmatter.pubDate) - new Date(a.frontmatter.pubDate));
-}
-
+import BaseLayout from '../layouts/BaseLayout.astro'
+import BlogPost from '../components/BlogPost.astro';
+const allPosts = Object.values(import.meta.glob('./posts/*.md', { eager: true }));
 const pageTitle = "我的 Astro 学习博客";
 ---
 <BaseLayout pageTitle={pageTitle}>
   <p>在这里，我将分享我的 Astro 学习之旅。</p>
-  {years.map((year) => (
-    <section>
-      <h2>{year}</h2>
-      <ul>
-        {postsByYear[year].map((post: any) => (
-          <li><a href={post.url}>{post.frontmatter.title}</a></li>
-        ))}
-      </ul>
-    </section>
-  ))}
+  <ul>
+    {allPosts.map((post: any) => <BlogPost title={post.frontmatter.title} url={post.url} />)}
+  </ul>
 </BaseLayout>
