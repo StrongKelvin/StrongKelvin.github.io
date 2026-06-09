@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>泥巴人 — 首頁設計 v0</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Design Tokens ===== */
+    :root {
+      --color-bg: oklch(97% 0.006 60);
+      --color-surface: oklch(100% 0 0);
+      --color-border: oklch(89% 0.008 60);
+      --color-text: oklch(18% 0.01 60);
+      --color-text-secondary: oklch(47% 0.012 60);
+      --color-accent: oklch(40% 0.065 45);
+      --color-accent-soft: oklch(40% 0.065 45 / 0.09);
+      --color-accent-muted: oklch(55% 0.05 45);
+      --color-tag-bg: oklch(93% 0.006 60);
+
+      --font-sans: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 2rem;
+      --space-xl: 3rem;
+      --space-2xl: 5rem;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+
+      --max-width: 72rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: oklch(100% 0 0 / 0.82);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .nav-links a:hover {
+      color: var(--color-accent);
+    }
+    .nav-search {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      cursor: text;
+      transition: border-color 0.2s;
+    }
+    .nav-search:hover,
+    .nav-search:focus-within {
+      border-color: var(--color-accent-muted);
+    }
+    .nav-search svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      opacity: 0.4;
+    }
+    .nav-search span {
+      white-space: nowrap;
+    }
+
+    /* ===== Hero ===== */
+    .hero-wrap {
+      position: relative;
+      background: var(--color-bg);
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+    }
+    .hero-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('./花蓮大農大富.png');
+      background-size: cover;
+      background-position: center 90%;
+      background-repeat: no-repeat;
+      /* 取上 60%（天空 + 山巒），裁掉下方車子與斷樹幹 */
+      filter: saturate(0.85) brightness(0.95);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        oklch(97% 0.006 60 / 0.15) 0%,
+        oklch(97% 0.006 60 / 0.6) 50%,
+        var(--color-bg) 100%
+      );
+      pointer-events: none;
+    }
+    .hero {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+    }
+    .hero-avatar {
+      width: 210px;
+      height: 210px;
+      border-radius: var(--radius-md);
+      background-image: url('./花蓮海邊人物.png');
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+      border: 2px solid var(--color-border);
+    }
+    .hero-body h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .hero-body .sub {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin-top: var(--space-sm);
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+    .hero-body .bio {
+      margin-top: var(--space-md);
+      font-size: 0.95rem;
+      color: var(--color-text-secondary);
+      max-width: 34rem;
+      line-height: 1.7;
+    }
+    .hero-body .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .hero-body .tech-tags span {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-sm);
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+
+    /* ===== Main Layout ===== */
+    .main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg) var(--space-2xl);
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: var(--space-xl);
+    }
+
+    /* ===== Recent Posts ===== */
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .post-list { display: flex; flex-direction: column; gap: var(--space-lg); }
+    .post-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      border: 1px solid var(--color-border);
+      transition: border-color 0.2s, box-shadow 0.25s;
+    }
+    .post-card:hover {
+      border-color: var(--color-accent-muted);
+      box-shadow: 0 2px 20px oklch(0% 0 0 / 0.04);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-xs);
+    }
+    .post-meta .dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--color-border);
+    }
+    .post-card h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      margin-bottom: var(--space-sm);
+    }
+    .post-card h2 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .post-card h2 a:hover {
+      color: var(--color-accent);
+    }
+    .post-card p {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .post-tags a {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-sm);
+      background: var(--color-tag-bg);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .post-tags a:hover {
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar { display: flex; flex-direction: column; gap: var(--space-xl); }
+
+    .widget {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      border: 1px solid var(--color-border);
+    }
+    .widget-title {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    .cat-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-xs); }
+    .cat-list li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      padding: var(--space-sm) 0;
+      transition: color 0.2s;
+    }
+    .cat-list li a:hover { color: var(--color-accent); }
+    .cat-list .count {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--color-text-secondary);
+      background: var(--color-bg);
+      padding: 0.1rem 0.45rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .tag-cloud a {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-sm);
+      background: var(--color-tag-bg);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tag-cloud a:hover {
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+
+    .widget-social {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 2;
+    }
+    .widget-social a {
+      color: var(--color-accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .widget-social a:hover {
+      color: var(--color-text);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      border-top: 1px solid var(--color-border);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .main { grid-template-columns: 1fr; }
+      .hero { flex-direction: column; text-align: center; padding-top: var(--space-xl); }
+      .hero-body .bio { margin-left: auto; margin-right: auto; }
+      .hero-body .tech-tags { justify-content: center; }
+      .nav-links { display: none; }
+      .nav-inner { padding: 0 var(--space-md); }
+      .hero-wrap::before { background-position: center 20%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">泥巴人</a>
+      <ul class="nav-links">
+        <li><a href="/">首頁</a></li>
+        <li><a href="/blog">文章</a></li>
+        <li><a href="/about">關於</a></li>
+      </ul>
+      <div class="nav-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span>搜尋文章...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-wrap">
+    <div class="hero-overlay"></div>
+    <div class="hero">
+      <div class="hero-avatar"></div>
+      <div class="hero-body">
+        <h1>泥巴人</h1>
+        <p class="sub">強・Kelvin</p>
+        <p class="bio">
+          手沾泥巴的開發者。寫 C#、Web、AI，也玩 Arduino、Raspberry Pi 跟音響改裝。
+          這裡記錄技術踩坑與 side project 的點滴。
+        </p>
+        <div class="tech-tags">
+          <span>C#</span>
+          <span>Web</span>
+          <span>AI</span>
+          <span>Arduino</span>
+          <span>Raspberry Pi</span>
+          <span>音響改裝</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- Left: Recent Posts -->
+    <section>
+      <h2 class="section-title">最新文章</h2>
+      <div class="post-list">
+        <article class="post-card">
+          <div class="post-meta">
+            <time>2026-02-03</time>
+            <span class="dot"></span>
+            <span>C#</span>
+          </div>
+          <h2><a href="#">我的第二篇博客文章</a></h2>
+          <p>学习了一些 Astro 后，我根本停不下来！</p>
+          <div class="post-tags">
+            <a href="#">astro</a>
+            <a href="#">learning in public</a>
+            <a href="#">successes</a>
+          </div>
+        </article>
+        <article class="post-card">
+          <div class="post-meta">
+            <time>2026-02-01</time>
+            <span class="dot"></span>
+            <span>AI</span>
+          </div>
+          <h2><a href="#">我的第一篇博客文章</a></h2>
+          <p>这是我 Astro 博客的第一篇文章。欢迎来到我学习关于 Astro 的新博客！</p>
+          <div class="post-tags">
+            <a href="#">astro</a>
+            <a href="#">blogging</a>
+            <a href="#">learning in public</a>
+          </div>
+        </article>
+        <article class="post-card">
+          <div class="post-meta">
+            <time>2022-08-08</time>
+            <span class="dot"></span>
+            <span>Web</span>
+          </div>
+          <h2><a href="#">我的第四篇博客文章</a></h2>
+          <p>这篇文章会自己出现在列表中！</p>
+          <div class="post-tags">
+            <a href="#">astro</a>
+            <a href="#">successes</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Right: Sidebar -->
+    <aside class="sidebar">
+
+      <!-- Categories -->
+      <div class="widget">
+        <h3 class="widget-title">分類</h3>
+        <ul class="cat-list">
+          <li><a href="#">C# <span class="count">12</span></a></li>
+          <li><a href="#">Web <span class="count">8</span></a></li>
+          <li><a href="#">AI <span class="count">5</span></a></li>
+          <li><a href="#">Arduino <span class="count">3</span></a></li>
+          <li><a href="#">Raspberry Pi <span class="count">2</span></a></li>
+          <li><a href="#">音響改裝 <span class="count">4</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Tags -->
+      <div class="widget">
+        <h3 class="widget-title">標籤</h3>
+        <div class="tag-cloud">
+          <a href="#">astro</a>
+          <a href="#">csharp</a>
+          <a href="#">dotnet</a>
+          <a href="#">blazor</a>
+          <a href="#">ai</a>
+          <a href="#">machine-learning</a>
+          <a href="#">arduino</a>
+          <a href="#">raspberry-pi</a>
+          <a href="#">audio</a>
+          <a href="#">diy</a>
+          <a href="#">web-api</a>
+          <a href="#">learning-in-public</a>
+        </div>
+      </div>
+
+      <!-- Social -->
+      <div class="widget">
+        <h3 class="widget-title">社群</h3>
+        <p class="widget-social">
+          <a href="#">GitHub</a> ·
+          <a href="#">Twitter</a> ·
+          <a href="#">LinkedIn</a>
+        </p>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2026 泥巴人 · 手沾泥巴，寫碼改機
+  </footer>
+
+</body>
+</html>
