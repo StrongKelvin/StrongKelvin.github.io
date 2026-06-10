@@ -1,9 +1,351 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Greeting from '../components/Greeting';
-const pageTitle = "首页";
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const recentPosts = sortedPosts.slice(0, 5);
+
+const allTags = [...new Set(allPosts.map(p => p.data.tags).flat())].sort();
+
+const categories = [
+  { name: 'C#', slug: 'csharp' },
+  { name: 'Web', slug: 'web' },
+  { name: 'AI', slug: 'ai' },
+  { name: 'Arduino', slug: 'arduino' },
+  { name: 'Raspberry Pi', slug: 'raspberry-pi' },
+  { name: '音響改裝', slug: 'audio' },
+];
 ---
-<BaseLayout pageTitle={pageTitle}>
-  <h2>我超棒的博客副标题</h2>
-  <Greeting client:load messages={["Hi","Hello","Hola","Habari"]} />
+
+<BaseLayout pageTitle="泥巴人">
+  <div class="hero-wrap">
+    <div class="hero-overlay"></div>
+    <div class="hero">
+      <div class="hero-avatar"></div>
+      <div class="hero-body">
+        <h1>泥巴人</h1>
+        <p class="sub">強・Kelvin</p>
+        <p class="bio">
+          手沾泥巴的開發者。寫 C#、Web、AI，也玩 Arduino、Raspberry Pi 跟音響改裝。
+          這裡記錄技術踩坑與 side project 的點滴。
+        </p>
+        <div class="tech-tags">
+          <span>C#</span>
+          <span>Web</span>
+          <span>AI</span>
+          <span>Arduino</span>
+          <span>Raspberry Pi</span>
+          <span>音響改裝</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <section>
+      <h2 class="section-title">最新文章</h2>
+      <div class="post-list">
+        {recentPosts.length > 0 ? (
+          recentPosts.map((post) => (
+            <article class="post-card">
+              <div class="post-meta">
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toISOString().slice(0, 10)}
+                </time>
+              </div>
+              <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
+              <p>{post.data.description}</p>
+              {post.data.tags && (
+                <div class="post-tags">
+                  {post.data.tags.map((tag) => (
+                    <a href={`/tags/${tag}`}>#{tag}</a>
+                  ))}
+                </div>
+              )}
+            </article>
+          ))
+        ) : (
+          <p style="color: var(--color-text-secondary); padding: var(--space-lg);">
+            還沒有人發表文章。
+          </p>
+        )}
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="widget">
+        <h3 class="widget-title">分類</h3>
+        <ul class="cat-list">
+          {categories.map((cat) => (
+            <li>
+              <a href={`/tags/${cat.slug}`}>
+                {cat.name}
+                <span class="count">
+                  {allPosts.filter(p => p.data.tags.some(t => t.toLowerCase() === cat.slug)).length}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="widget">
+        <h3 class="widget-title">標籤</h3>
+        <div class="tag-cloud">
+          {allTags.map((tag) => (
+            <a href={`/tags/${tag}`}>{tag}</a>
+          ))}
+        </div>
+      </div>
+
+      <div class="widget">
+        <h3 class="widget-title">社群</h3>
+        <p class="widget-social">
+          <a href="https://github.com/StrongKelvin">GitHub</a> ·
+          <a href="#">Twitter</a> ·
+          <a href="#">LinkedIn</a>
+        </p>
+      </div>
+    </aside>
+  </div>
 </BaseLayout>
+
+<style>
+  /* ===== Hero ===== */
+  .hero-wrap {
+    position: relative;
+    background: var(--color-bg);
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+  }
+  .hero-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/images/花蓮大農大富.png');
+    background-size: cover;
+    background-position: center 25%;
+    background-repeat: no-repeat;
+    filter: saturate(0.85) brightness(0.95);
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      oklch(97% 0.006 60 / 0.15) 0%,
+      oklch(97% 0.006 60 / 0.6) 50%,
+      var(--color-bg) 100%
+    );
+    pointer-events: none;
+  }
+  .hero {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+    width: 100%;
+  }
+  .hero-avatar {
+    width: 210px;
+    height: 210px;
+    border-radius: var(--radius-md);
+    background-image: url('/images/花蓮海邊人物.png');
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    border: 2px solid var(--color-border);
+  }
+  .hero-body h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .hero-body .sub {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-sm);
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+  }
+  .hero-body .bio {
+    margin-top: var(--space-md);
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    max-width: 34rem;
+    line-height: 1.7;
+  }
+  .hero-body .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+  .hero-body .tech-tags span {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  /* ===== Main Layout ===== */
+  .main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-lg) var(--space-2xl);
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-xl);
+  }
+
+  /* ===== Recent Posts ===== */
+  .section-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .post-list { display: flex; flex-direction: column; gap: var(--space-lg); }
+  .post-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    transition: border-color 0.2s, box-shadow 0.25s;
+  }
+  .post-card:hover {
+    border-color: var(--color-accent-muted);
+    box-shadow: 0 2px 20px oklch(0% 0 0 / 0.04);
+  }
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xs);
+  }
+  .post-card h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    margin-bottom: var(--space-sm);
+  }
+  .post-card h2 a:hover {
+    color: var(--color-accent);
+  }
+  .post-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+  .post-tags a {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-tag-bg);
+    color: var(--color-text-secondary);
+    transition: background 0.2s, color 0.2s;
+  }
+  .post-tags a:hover {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  /* ===== Sidebar ===== */
+  .sidebar { display: flex; flex-direction: column; gap: var(--space-xl); }
+  .widget {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+  }
+  .widget-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+  }
+  .cat-list { display: flex; flex-direction: column; gap: var(--space-xs); }
+  .cat-list li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    padding: var(--space-sm) 0;
+    transition: color 0.2s;
+  }
+  .cat-list li a:hover { color: var(--color-accent); }
+  .cat-list .count {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+    padding: 0.1rem 0.45rem;
+    border-radius: var(--radius-sm);
+  }
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+  .tag-cloud a {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-tag-bg);
+    color: var(--color-text-secondary);
+    transition: background 0.2s, color 0.2s;
+  }
+  .tag-cloud a:hover {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  .widget-social {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 2;
+  }
+  .widget-social a {
+    color: var(--color-accent);
+    transition: color 0.2s;
+  }
+  .widget-social a:hover {
+    color: var(--color-text);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+    .hero { flex-direction: column; text-align: center; padding-top: var(--space-xl); }
+    .hero-body .bio { margin-left: auto; margin-right: auto; }
+    .hero-body .tech-tags { justify-content: center; }
+    .hero-wrap::before { background-position: center 20%; }
+    .hero-avatar { width: 140px; height: 140px; }
+  }
+</style>
