@@ -1,0 +1,115 @@
+---
+const { allPosts, allTags } = Astro.props;
+
+const categories = [
+  { name: 'C#', slug: 'csharp' },
+  { name: 'Web', slug: 'web' },
+  { name: 'AI', slug: 'ai' },
+  { name: 'Arduino', slug: 'arduino' },
+  { name: 'Raspberry Pi', slug: 'raspberry-pi' },
+  { name: '音響改裝', slug: 'audio' },
+];
+---
+
+<aside class="sidebar">
+  <div class="widget">
+    <h3 class="widget-title">分類</h3>
+    <ul class="cat-list">
+      {categories.map((cat) => (
+        <li>
+          <a href={`/tags/${cat.slug}`}>
+            {cat.name}
+            <span class="count">
+              {allPosts.filter(p => p.data.tags.some(t => t.toLowerCase() === cat.slug)).length}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="widget">
+    <h3 class="widget-title">標籤</h3>
+    <div class="tag-cloud">
+      {allTags.map((tag) => (
+        <a href={`/tags/${tag}`}>{tag}</a>
+      ))}
+    </div>
+  </div>
+
+  <div class="widget">
+    <h3 class="widget-title">社群</h3>
+    <p class="widget-social">
+      <a href="https://github.com/StrongKelvin">GitHub</a> ·
+      <a href="#">Twitter</a> ·
+      <a href="#">LinkedIn</a>
+    </p>
+  </div>
+</aside>
+
+<style>
+  .sidebar { display: flex; flex-direction: column; gap: var(--space-xl); }
+  .widget {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+  }
+  .widget-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+  }
+  .cat-list { display: flex; flex-direction: column; gap: var(--space-xs); }
+  .cat-list li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    padding: var(--space-sm) 0;
+    transition: color 0.2s;
+  }
+  .cat-list li a:hover { color: var(--color-accent); }
+  .cat-list .count {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+    padding: 0.1rem 0.45rem;
+    border-radius: var(--radius-sm);
+  }
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+  .tag-cloud a {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-tag-bg);
+    color: var(--color-text-secondary);
+    transition: background 0.2s, color 0.2s;
+  }
+  .tag-cloud a:hover {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  .widget-social {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 2;
+  }
+  .widget-social a {
+    color: var(--color-accent);
+    transition: color 0.2s;
+  }
+  .widget-social a:hover {
+    color: var(--color-text);
+  }
+</style>
