@@ -1,20 +1,36 @@
----
-// const platform = "github";
-// const username = "StrongKelvin";
-import Social from './Social.astro';
----
+<footer class="footer">
+  <span>&copy; 2026 泥巴人 · 手沾泥巴，寫碼改機</span>
+  <div class="footer-links">
+    <a href="https://github.com/StrongKelvin">GitHub</a>
+    <a href="#">Twitter</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
 <style>
-  footer {
+  .footer {
+    border-top: 1px solid var(--color-border);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-lg);
     display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+  .footer-links {
+    display: flex;
+    gap: var(--space-md);
+  }
+  .footer-links a {
+    color: var(--color-text-secondary);
+    transition: color 0.2s;
+  }
+  .footer-links a:hover {
+    color: var(--color-accent);
+  }
+  @media (max-width: 640px) {
+    .footer { flex-direction: column; gap: var(--space-sm); text-align: center; }
   }
 </style>
-
-<footer>
-  <!-- <p>在 <a href={`https://www.${platform}.com/${username}`}>{platform}</a> 上，了解有关我的项目的更多信息！</p> -->
-  <Social platform="github" username="StrongKelvin" />
-  <Social platform="twitter" username="StrongKelvin" />
-  <Social platform="linkedin" username="StrongKelvin" />
-  <Social platform="facebook" username="StrongKelvin" />
-</footer>

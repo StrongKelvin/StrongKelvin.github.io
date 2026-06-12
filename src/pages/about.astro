@@ -1,63 +1,135 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Profile from '../components/Profile.astro';
+import Sidebar from '../components/Sidebar.astro';
 
-const pageTitle="關於我";
-
-const identity = {
-  firstName: "莎拉",
-  country: "加拿大",
-  occupation: "技术撰稿人",
-  hobbies: ["摄影", "观鸟", "棒球"],
-};
-
-const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Writing Docs"];
-
-const happy = true;
-const finished = false;
-const goal = 3;
-
-const skillColor = "crimson";
-const fontWeight = "bold";
-const textCase = "upperCase";
+const pageTitle = "關於我";
+const allPosts = await getCollection('blog');
+const allTags = [...new Set(allPosts.map(p => p.data.tags).flat())].sort();
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <style define:vars={{skillColor,fontWeight,textCase}}>
-      h1 {
-        color: purple;
-        font-size: 4rem;
-      }
-      .skill {
-        color: var(--skillColor);
-        font-weight: var(--frontWeith);
-        text-transform: var(--textCase);
-      }
-    </style>
-    <h1>我的 Astro 网站</h1>
-    <h1>{pageTitle}</h1>
-    <h2>……和我的新 Astro 网站！</h2>
+  <Profile
+    name="泥巴人"
+    subtitle="強・Kelvin"
+    bio="手沾泥巴的開發者。寫 C#、Web、AI，也玩 Arduino、Raspberry Pi 跟音響改裝。這裡記錄技術踩坑與 side project 的點滴。"
+    tags={["C#", "Web", "AI", "Arduino", "Raspberry Pi", "音響改裝"]}
+  />
 
-    <p>我正在学习 Astro 的入门教程。这是我网站上的第二个页面，也是我自己建立的第一页面！</p>
+  <div class="main">
+    <div class="content">
+      <section class="about-section">
+        <h2 class="section-title">關於這個網站</h2>
+        <p>這個網站是我用來記錄技術筆記與 side project 的地方。從 C#、Web 開發、AI 應用到硬體整合，只要跟我興趣相關的主題都會出現在這裡。</p>
+        <p>取名「泥巴人」是因為我喜歡動手做——雙手沾滿泥巴的那種實作感。不管是寫程式還是改音響，享受從零到有的過程。</p>
+      </section>
 
-    <p>随着我完成更多教程，该站点将更新，所以请继续查看我的旅程将如何进行吧！</p>
+      <section class="about-section">
+        <h2 class="section-title">技能</h2>
+        <div class="skill-grid">
+          <div class="skill-card">
+            <h3>C# / .NET</h3>
+            <p>後端開發、桌面應用、Azure 雲端服務</p>
+          </div>
+          <div class="skill-card">
+            <h3>Web 開發</h3>
+            <p>HTML、CSS、JavaScript、Astro、React</p>
+          </div>
+          <div class="skill-card">
+            <h3>AI / ML</h3>
+            <p>機器學習、自然語言處理、LLM 應用</p>
+          </div>
+          <div class="skill-card">
+            <h3>Arduino / IoT</h3>
+            <p>嵌入式系統、感測器整合、自動化控制</p>
+          </div>
+          <div class="skill-card">
+            <h3>Raspberry Pi</h3>
+            <p>單板電腦應用、伺服器架設、媒體中心</p>
+          </div>
+          <div class="skill-card">
+            <h3>音響改裝</h3>
+            <p>擴大機 DIY、喇叭設計、數位流播放</p>
+          </div>
+        </div>
+      </section>
+    </div>
 
-    <p>以下是关于我的几个事实：</p>
-    <ul>
-      <li>我的名字是{identity.firstName}.</li>
-      <li>我住在{identity.country}。我的职业是{identity.occupation}。</li>
-      {identity.hobbies.length >= 2 &&
-        <li>我的两个习惯：{identity.hobbies[0]}和{identity.hobbies[1]}</li>
-      }
-    </ul>
-    <p>我的技能是：</p>
-    <ul>
-      {skills.map((skill) => <li class="skill">{skill}</li>)}
-    </ul>
-
-    {happy && <p>我非常乐意学习 Astro！</p>}
-
-    {finished && <p>我完成了这节教程！</p>}
-
-    {goal === 3 ? <p>我的目标是在三天内完成。</p> : <p>我的目标不是 3 天。</p>}
-
+    <Sidebar allPosts={allPosts} allTags={allTags} />
+  </div>
 </BaseLayout>
+
+<style>
+  .main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-lg) var(--space-2xl);
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-xl);
+  }
+
+  .about-section {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .section-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .about-section p {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 42rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .skill-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    transition: border-color 0.2s, box-shadow 0.25s;
+  }
+
+  .skill-card:hover {
+    border-color: var(--color-accent-muted);
+    box-shadow: 0 2px 20px oklch(0% 0 0 / 0.04);
+  }
+
+  .skill-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+  }
+
+  .skill-card p {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .main {
+      grid-template-columns: 1fr;
+    }
+    .skill-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
