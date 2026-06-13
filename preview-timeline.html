@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>預覽：時間軸文章歸檔 — 泥巴人</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: oklch(97% 0.006 60);
+    --color-surface: oklch(100% 0 0);
+    --color-border: oklch(89% 0.008 60);
+    --color-text: oklch(18% 0.01 60);
+    --color-text-secondary: oklch(47% 0.012 60);
+    --color-accent: oklch(40% 0.065 45);
+    --color-accent-soft: oklch(40% 0.065 45 / 0.09);
+    --color-accent-muted: oklch(55% 0.05 45);
+    --color-tag-bg: oklch(93% 0.006 60);
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-2xl: 5rem;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --max-width: 72rem;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  [data-theme="dark"] {
+    --color-bg: oklch(17% 0.008 60);
+    --color-surface: oklch(22% 0.01 60);
+    --color-border: oklch(30% 0.01 60);
+    --color-text: oklch(88% 0.006 60);
+    --color-text-secondary: oklch(62% 0.01 60);
+    --color-accent: oklch(75% 0.065 45);
+    --color-accent-soft: oklch(75% 0.065 45 / 0.12);
+    --color-accent-muted: oklch(65% 0.05 45);
+    --color-tag-bg: oklch(28% 0.01 60);
+  }
+
+  html { transition: color 0.3s, background-color 0.3s; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+
+  /* ===== Layout ===== */
+  .page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-xl);
+  }
+
+  /* ===== Profile (simulated) ===== */
+  .profile-wrap {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-lg) 0;
+  }
+
+  .profile {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .profile-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--color-accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .profile-info h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.1rem;
+  }
+  .profile-info .sub {
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+  }
+  .profile-info .bio {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-xs);
+    line-height: 1.5;
+    max-width: 42rem;
+  }
+  .profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+  .profile-tags span {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-tag-bg);
+    color: var(--color-text-secondary);
+  }
+
+  /* ===== Section Title ===== */
+  .section-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* ===== Timeline Shared ===== */
+  .timeline {
+    position: relative;
+    padding-left: var(--space-xl);
+  }
+
+  .year-group {
+    position: relative;
+    margin-bottom: var(--space-lg);
+  }
+  .year-group:last-child { margin-bottom: 0; }
+
+  /* ===== Variant A: Classic Dot ===== */
+  .tl-classic .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.6rem; bottom: 0;
+    width: 2px;
+    background: var(--color-border);
+  }
+  .tl-classic .year-group::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-xl) - 5px);
+    top: 0.6rem;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-accent-muted);
+    transition: background 0.25s, border-color 0.25s, transform 0.25s;
+    z-index: 1;
+  }
+  .tl-classic .year-group.is-open::before {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: scale(1.2);
+  }
+  .tl-classic .year-group.is-open ~ .year-group::before {
+    border-color: var(--color-border);
+  }
+
+  /* ===== Variant B1: Needle + Spotlight ===== */
+  .tl-needle-spotlight .timeline::before,
+  .tl-needle-glow .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.6rem; bottom: 0;
+    width: 1.5px;
+    background: var(--color-border);
+    transition: background 0.3s;
+  }
+  .tl-needle-spotlight .year-group::before,
+  .tl-needle-glow .year-group::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-xl) - 4px);
+    top: 0.6rem;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--color-border);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    z-index: 2;
+  }
+  .tl-needle-spotlight .year-group.is-open::before,
+  .tl-needle-glow .year-group.is-open::before {
+    background: var(--color-accent);
+    transform: scale(1.4);
+    box-shadow:
+      0 0 0 4px var(--color-accent-soft),
+      0 0 0 10px oklch(40% 0.065 45 / 0.05),
+      0 0 20px 4px oklch(40% 0.065 45 / 0.08);
+  }
+
+  /* --- Spotlight: cone of light from dot toward year text --- */
+  .tl-needle-spotlight .year-group.is-open .year-header {
+    position: relative;
+  }
+  .tl-needle-spotlight .year-group.is-open .year-header::after {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-xl) - 40px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: calc(100% + var(--space-xl) + 60px);
+    height: 4rem;
+    background: radial-gradient(
+      ellipse 100px 40px at 30px center,
+      oklch(40% 0.065 45 / 0.14) 0%,
+      oklch(40% 0.065 45 / 0.05) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+    mask-image: linear-gradient(90deg, transparent 10px, #000 40px, #000 60%, transparent 85%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 10px, #000 40px, #000 60%, transparent 85%);
+  }
+  .tl-needle-spotlight .year-group.is-open .year-header * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- Self-glow: year header glows as a whole unit --- */
+  .tl-needle-glow .year-group.is-open .year-header {
+    background: oklch(78% 0.10 230 / 0.15);
+    border-radius: 99px;
+    padding: 0.3rem 0.8rem 0.3rem 0.3rem;
+    margin-left: -0.3rem;
+    box-shadow:
+      0 0 12px oklch(78% 0.10 230 / 0.3),
+      0 0 36px oklch(78% 0.10 230 / 0.18),
+      inset 0 0 16px oklch(78% 0.10 230 / 0.1);
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  .tl-needle-glow .year-group.is-open::before {
+    box-shadow:
+      0 0 0 5px oklch(78% 0.10 230 / 0.35),
+      0 0 0 14px oklch(78% 0.10 230 / 0.12),
+      0 0 32px 8px oklch(78% 0.10 230 / 0.18) !important;
+  }
+
+  /* ===== Variant C: Ruler — tick marks, no dots ===== */
+  .tl-ruler .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.6rem; bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+  }
+  .tl-ruler .year-group::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-xl));
+    top: 0.75rem;
+    width: 12px; height: 2px;
+    background: var(--color-border);
+    border-radius: 0;
+    z-index: 1;
+    transition: background 0.25s, width 0.25s;
+  }
+  .tl-ruler .year-group.is-open::before {
+    width: 18px;
+    background: var(--color-accent);
+  }
+  .tl-ruler .year-group::after {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-xl) + 12px);
+    top: 0.82rem;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 3px 0 3px 5px;
+    border-color: transparent transparent transparent var(--color-border);
+    opacity: 0;
+    transition: opacity 0.25s;
+    z-index: 1;
+  }
+  .tl-ruler .year-group.is-open::after {
+    opacity: 1;
+    border-color: transparent transparent transparent var(--color-accent);
+  }
+  .tl-ruler .year-group.is-open ~ .year-group::before {
+    background: var(--color-border);
+  }
+
+  /* ===== Year Header ===== */
+  .year-header {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+    user-select: none;
+    padding: var(--space-xs) 0;
+    transition: color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .year-header:hover { color: var(--color-accent); }
+
+  .year-label {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .year-count {
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    background: var(--color-tag-bg);
+    padding: 0.1rem 0.5rem;
+    border-radius: 99px;
+    transition: background 0.2s;
+  }
+  .year-header:hover .year-count {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  .year-arrow {
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-block;
+  }
+  .year-group.is-open .year-arrow {
+    transform: rotate(90deg);
+  }
+
+  /* ===== Post list (collapsible) ===== */
+  .post-list {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.3s ease;
+  }
+  .year-group.is-open .post-list {
+    max-height: 2000px;
+    opacity: 1;
+  }
+
+  .post-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md) 0 var(--space-sm);
+  }
+
+  .post-item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    transition: background 0.2s;
+  }
+  .post-item:hover {
+    background: var(--color-accent-soft);
+  }
+
+  .post-date {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    min-width: 3.2rem;
+    flex-shrink: 0;
+  }
+
+  .post-title-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+    transition: color 0.2s;
+    line-height: 1.4;
+  }
+  .post-item:hover .post-title-link {
+    color: var(--color-accent);
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .post-tags span {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    padding: 0.05rem 0.4rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-tag-bg);
+    color: var(--color-text-secondary);
+  }
+
+  /* ===== Sidebar ===== */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .sidebar-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+  }
+
+  .sidebar-card h3 {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+  .sidebar-tags span {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-tag-bg);
+    color: var(--color-text-secondary);
+    transition: background 0.2s, color 0.2s;
+    cursor: default;
+  }
+  .sidebar-tags span:hover {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  /* ===== Tweaks Panel ===== */
+  .tweaks-btn {
+    position: fixed;
+    bottom: 1.5rem; right: 1.5rem;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.2s, color 0.2s;
+    box-shadow: 0 2px 12px oklch(0% 0 0 / 0.06);
+  }
+  .tweaks-btn:hover {
+    box-shadow: 0 4px 20px oklch(0% 0 0 / 0.1);
+    color: var(--color-accent);
+  }
+
+  .tweaks-panel {
+    position: fixed;
+    bottom: 5rem; right: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    min-width: 220px;
+    z-index: 99;
+    box-shadow: 0 8px 40px oklch(0% 0 0 / 0.08);
+    display: none;
+  }
+  .tweaks-panel.is-open { display: block; }
+
+  .tweaks-panel h4 {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .tweak-group {
+    margin-bottom: var(--space-md);
+  }
+  .tweak-group:last-child { margin-bottom: 0; }
+
+  .tweak-group label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+  }
+
+  .tweak-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .tweak-opt {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 0.85rem;
+  }
+  .tweak-opt:hover { background: var(--color-accent-soft); }
+  .tweak-opt.is-active {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .tweak-opt input[type="radio"] {
+    appearance: none;
+    width: 14px; height: 14px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    margin: 0;
+    flex-shrink: 0;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .tweak-opt.is-active input[type="radio"] {
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 0 3px var(--color-accent);
+  }
+
+  .tweak-desc {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    padding-left: 1.6rem;
+    margin-top: -0.1rem;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .page { grid-template-columns: 1fr; padding: 0 var(--space-md) var(--space-lg); }
+    .profile-wrap { padding: var(--space-lg) var(--space-md) 0; }
+    .profile { flex-direction: column; align-items: flex-start; gap: var(--space-md); }
+    .timeline { padding-left: var(--space-lg); }
+    .tl-classic .year-group::before { left: calc(-1 * var(--space-lg) - 5px); }
+    .tl-needle-spotlight .year-group::before,
+    .tl-needle-glow .year-group::before { left: calc(-1 * var(--space-lg) - 4px); }
+    .tl-needle-spotlight .year-group.is-open .year-header::after {
+      left: calc(-1 * var(--space-lg) - 40px);
+      width: calc(100% + var(--space-lg) + 60px);
+    }
+    .tl-ruler .year-group::before { left: calc(-1 * var(--space-lg)); }
+    .tl-ruler .year-group::after { left: calc(-1 * var(--space-lg) + 12px); }
+    .year-label { font-size: 1.3rem; }
+    .post-item { flex-wrap: wrap; gap: var(--space-xs); }
+    .post-tags { margin-left: 0; }
+    .post-date { min-width: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="profile-wrap">
+  <div class="profile">
+    <div class="profile-avatar">泥</div>
+    <div class="profile-info">
+      <h1>泥巴人</h1>
+      <div class="sub">強・Kelvin</div>
+      <div class="bio">手沾泥巴的開發者。寫 C#、Web、AI，也玩 Arduino、Raspberry Pi 跟音響改裝。這裡記錄技術踩坑與 side project 的點滴。</div>
+      <div class="profile-tags">
+        <span>C#</span><span>Web</span><span>AI</span><span>Arduino</span><span>Raspberry Pi</span><span>音響改裝</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <section>
+    <h2 class="section-title">所有文章 — 時間軸</h2>
+
+    <div class="tl-wrap tl-needle-spotlight" id="tlWrap">
+    <div class="timeline" id="timeline">
+      <!-- Years rendered by JS -->
+    </div>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h3>關於我</h3>
+      <p style="font-size:0.85rem;color:var(--color-text-secondary);line-height:1.6;">
+        手沾泥巴的開發者。寫 C#、Web、AI，也玩 Arduino、Raspberry Pi 跟音響改裝。
+      </p>
+    </div>
+    <div class="sidebar-card">
+      <h3>標籤</h3>
+      <div class="sidebar-tags">
+        <span>#C#</span><span>#Web</span><span>#AI</span><span>#Arduino</span>
+        <span>#Raspberry Pi</span><span>#音響改裝</span><span>#Astro</span>
+        <span>#JavaScript</span><span>#Python</span><span>#Docker</span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Tweaks -->
+<button class="tweaks-btn" id="tweaksBtn" title="樣式調整">&#9881;</button>
+<div class="tweaks-panel" id="tweaksPanel">
+  <h4>Tweaks</h4>
+  <div class="tweak-group">
+    <label>時間軸樣式</label>
+    <div class="tweak-options" id="variantRadios">
+      <label class="tweak-opt" data-variant="tl-classic">
+        <input type="radio" name="variant" value="tl-classic">
+        <span>圓點（古典）</span>
+      </label>
+      <span class="tweak-desc">空心圓 · 展開時填滿</span>
+
+      <label class="tweak-opt is-active" data-variant="tl-needle-spotlight">
+        <input type="radio" name="variant" value="tl-needle-spotlight" checked>
+        <span>實點＋探照燈</span>
+      </label>
+      <span class="tweak-desc">光從圓點向右照射</span>
+
+      <label class="tweak-opt" data-variant="tl-needle-glow">
+        <input type="radio" name="variant" value="tl-needle-glow">
+        <span>實點＋自發光</span>
+      </label>
+      <span class="tweak-desc">年份文字自帶光暈</span>
+
+      <label class="tweak-opt" data-variant="tl-ruler">
+        <input type="radio" name="variant" value="tl-ruler">
+        <span>刻尺（極簡）</span>
+      </label>
+      <span class="tweak-desc">細線 + 刻度標記 · 無圓點</span>
+    </div>
+    <div class="tweak-group">
+      <label>佈景主題</label>
+      <div class="tweak-options">
+        <label class="tweak-opt is-active" id="themeLightOpt">
+          <input type="radio" name="theme" value="light" checked>
+          <span>淺色</span>
+        </label>
+        <label class="tweak-opt" id="themeDarkOpt">
+          <input type="radio" name="theme" value="dark">
+          <span>暗黑</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Sample data =====
+const postsByYear = {
+  2026: [
+    { date: '02-10', title: 'Astro 內容集合實戰筆記', tags: ['Astro', 'Web'] },
+    { date: '01-28', title: 'Raspberry Pi 5 效能調校與散熱改裝', tags: ['Raspberry Pi', 'Linux'] },
+    { date: '01-15', title: '2026 年度目標與學習路徑', tags: ['隨筆'] },
+  ],
+  2025: [
+    { date: '12-20', title: '從零搭建 HomeLab：Kubernetes 輕量篇', tags: ['Docker', 'Linux'] },
+    { date: '11-05', title: 'C# 12 新功能實測與心得', tags: ['C#', '.NET'] },
+    { date: '10-12', title: 'AI 輔助程式碼審查的實務經驗', tags: ['AI', 'Web'] },
+    { date: '08-30', title: '音響 DIY：更換 OP 放大器實錄', tags: ['音響改裝'] },
+    { date: '07-15', title: 'Arduino 與感測器整合入門', tags: ['Arduino', 'IoT'] },
+    { date: '05-20', title: 'Web API 設計原則與 Anti-Patterns', tags: ['Web', 'C#'] },
+    { date: '03-10', title: 'VS Code 擴充套件開發入門', tags: ['Web', 'JavaScript'] },
+    { date: '01-22', title: '2025 回顧與技術趨勢觀察', tags: ['隨筆'] },
+  ],
+  2024: [
+    { date: '11-18', title: '使用 Astro 重構個人部落格', tags: ['Astro', 'Web'] },
+    { date: '09-05', title: 'Python 非同步程式設計模式', tags: ['Python'] },
+    { date: '07-22', title: 'Raspberry Pi 低功耗監控系統', tags: ['Raspberry Pi', 'IoT'] },
+    { date: '05-14', title: '深入理解 ASP.NET Core Middleware', tags: ['C#', '.NET', 'Web'] },
+    { date: '03-28', title: 'Git Workflow 團隊協作最佳實踐', tags: ['Web'] },
+    { date: '02-10', title: 'Docker Compose 多環境管理', tags: ['Docker', 'Web'] },
+  ],
+  2023: [
+    { date: '12-15', title: '2023 年度書單與學習總結', tags: ['隨筆'] },
+    { date: '10-08', title: 'Arduino 藍牙遙控車實作', tags: ['Arduino', 'IoT'] },
+    { date: '08-20', title: 'JavaScript 原型鍊深入解析', tags: ['JavaScript', 'Web'] },
+    { date: '06-12', title: '音響喇叭改裝與分音器設計', tags: ['音響改裝'] },
+    { date: '04-05', title: 'C# 高效能程式設計技巧', tags: ['C#', '.NET'] },
+    { date: '02-18', title: 'Web 無障礙開發入門', tags: ['Web'] },
+  ],
+  2022: [
+    { date: '11-30', title: 'Linux Server 初期設定筆記', tags: ['Linux'] },
+    { date: '09-15', title: 'AI 影像辨識在居家應用的嘗試', tags: ['AI', 'Python'] },
+    { date: '07-08', title: 'Arduino 與 Raspberry Pi 比較心得', tags: ['Arduino', 'Raspberry Pi', 'IoT'] },
+    { date: '05-22', title: 'CSS Grid 實戰佈局', tags: ['Web'] },
+    { date: '03-14', title: '使用 ML.NET 做異常偵測', tags: ['C#', 'AI', '.NET'] },
+  ],
+  2021: [
+    { date: '12-05', title: '2021 技術回顧與展望', tags: ['隨筆'] },
+    { date: '10-10', title: 'React Hooks 實戰模式', tags: ['Web', 'JavaScript'] },
+    { date: '08-01', title: 'Arduino 感測器資料可視化', tags: ['Arduino', 'IoT', 'Python'] },
+    { date: '06-15', title: 'Web 效能優化工具鏈', tags: ['Web'] },
+  ],
+  2020: [
+    { date: '11-20', title: 'Raspberry Pi 架設個人 NAS', tags: ['Raspberry Pi', 'Linux'] },
+    { date: '09-08', title: 'C# 8 與 9 功能整理', tags: ['C#', '.NET'] },
+    { date: '07-12', title: '疫情期間的遠端工作配置', tags: ['隨筆'] },
+    { date: '05-05', title: 'JavaScript 非同步發展史', tags: ['JavaScript', 'Web'] },
+  ],
+  2019: [
+    { date: '12-25', title: '部落格開張 — 為什麼寫技術文章', tags: ['隨筆'] },
+    { date: '10-15', title: '第一次玩 Arduino：LED 閃爍專案', tags: ['Arduino', 'IoT'] },
+    { date: '08-20', title: '音響系統基礎知識入門', tags: ['音響改裝'] },
+  ],
+};
+
+// ===== Render timeline =====
+const timelineEl = document.getElementById('timeline');
+const years = Object.keys(postsByYear).sort((a, b) => b - a);
+
+years.forEach((year, yi) => {
+  const posts = postsByYear[year];
+  const group = document.createElement('div');
+  group.className = 'year-group' + (yi === 0 ? ' is-open' : '');
+  group.dataset.year = year;
+
+  group.innerHTML = `
+    <div class="year-header">
+      <span class="year-label">${year}</span>
+      <span class="year-count">${posts.length}</span>
+      <span class="year-arrow">&#9654;</span>
+    </div>
+    <div class="post-list">
+      <div class="post-items">
+        ${posts.map(p => `
+          <div class="post-item">
+            <span class="post-date">${p.date}</span>
+            <a class="post-title-link" href="#">${p.title}</a>
+            <div class="post-tags">
+              ${p.tags.map(t => `<span>#${t}</span>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  const header = group.querySelector('.year-header');
+  header.addEventListener('click', () => {
+    const isOpen = group.classList.contains('is-open');
+    if (!isOpen) {
+      document.querySelectorAll('.year-group.is-open').forEach(el => {
+        el.classList.remove('is-open');
+      });
+    }
+    group.classList.toggle('is-open');
+  });
+
+  timelineEl.appendChild(group);
+});
+
+// ===== Tweaks =====
+const tweaksBtn = document.getElementById('tweaksBtn');
+const tweaksPanel = document.getElementById('tweaksPanel');
+
+tweaksBtn.addEventListener('click', () => {
+  tweaksPanel.classList.toggle('is-open');
+});
+
+document.addEventListener('click', (e) => {
+  if (!tweaksBtn.contains(e.target) && !tweaksPanel.contains(e.target)) {
+    tweaksPanel.classList.remove('is-open');
+  }
+});
+
+// Variant switching
+const variantRadios = document.getElementById('variantRadios');
+const tlWrap = document.getElementById('tlWrap');
+
+variantRadios.addEventListener('change', (e) => {
+  if (e.target.name === 'variant') {
+    const variant = e.target.value;
+    tlWrap.className = 'tl-wrap ' + variant;
+
+    variantRadios.querySelectorAll('.tweak-opt').forEach(el => {
+      const input = el.querySelector('input');
+      el.classList.toggle('is-active', input.checked);
+    });
+  }
+});
+
+// Theme switching
+const themeRadios = document.querySelectorAll('input[name="theme"]');
+themeRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    const theme = radio.value;
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+
+    document.querySelectorAll('#themeLightOpt, #themeDarkOpt').forEach(el => {
+      const input = el.querySelector('input');
+      el.classList.toggle('is-active', input.checked);
+    });
+  });
+});
+</script>
+</body>
+</html>
