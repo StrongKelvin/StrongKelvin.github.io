@@ -1,4 +1,4 @@
-## 新增需求
+## 需求
 
 ### 需求：時間軸文章列表元件
 系統 SHALL 提供一個 `PostTimelineList.astro` 元件，以垂直時間軸佈局呈現文章列表，包含年份分組、可折疊年份區段（手風琴），以及與 `preview-timeline.html` tl-needle-glow 變體一致的光暈視覺效果。
@@ -72,7 +72,7 @@
 - **WHEN** 使用者懸停於文章項目
 - **THEN** 項目背景 SHALL 變為 `var(--color-accent-soft)`，標題連結 SHALL 變為 `var(--color-accent)`
 
-### 需求：折疊動画
+### 需求：折疊動畫
 開啟與關閉年份區段 SHALL 有平滑動畫。
 
 #### 情境：平滑開啟／關閉過渡

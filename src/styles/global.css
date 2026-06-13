@@ -1,6 +1,6 @@
 :root {
   --color-bg: oklch(97% 0.006 60);
-  --color-surface: oklch(100% 0 0);
+  --color-surface: oklch(95% 0.004 60);
   --color-border: oklch(89% 0.008 60);
   --color-text: oklch(18% 0.01 60);
   --color-text-secondary: oklch(47% 0.012 60);
@@ -25,6 +25,8 @@
   --max-width: 72rem;
 }
 
+html { transition: color 0.3s, background-color 0.3s; }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -47,3 +49,15 @@ a {
 }
 
 ul { list-style: none; }
+
+html.dark {
+  --color-bg: oklch(17% 0.008 60);
+  --color-surface: oklch(22% 0.01 60);
+  --color-border: oklch(30% 0.01 60);
+  --color-text: oklch(88% 0.006 60);
+  --color-text-secondary: oklch(62% 0.01 60);
+  --color-accent: oklch(75% 0.065 45);
+  --color-accent-soft: oklch(75% 0.065 45 / 0.12);
+  --color-accent-muted: oklch(65% 0.05 45);
+  --color-tag-bg: oklch(28% 0.01 60);
+}
