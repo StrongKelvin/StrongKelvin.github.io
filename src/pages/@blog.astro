@@ -2,20 +2,9 @@
 import { getCollection } from "astro:content";
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Profile from '../components/Profile.astro';
+import PostTimelineList from '../components/PostTimelineList.astro';
 
 const allPosts = await getCollection('blog');
-
-const postsByYear = {};
-for (const post of allPosts) {
-  const year = post.data.pubDate.getFullYear();
-  if (!postsByYear[year]) postsByYear[year] = [];
-  postsByYear[year].push(post);
-}
-
-const years = Object.keys(postsByYear).sort((a, b) => b - a);
-for (const year of years) {
-  postsByYear[year].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-}
 ---
 <BaseLayout pageTitle="文章歸檔">
   <Profile
@@ -26,31 +15,7 @@ for (const year of years) {
   />
   <div class="archive">
     <h2 class="page-title">文章歸檔</h2>
-    {years.map((year) => (
-      <section class="year-group">
-        <h3 class="year-title">{year}</h3>
-        <div class="post-list">
-          {postsByYear[year].map((post: any) => (
-            <article class="post-card">
-              <div class="post-meta">
-                <time datetime={post.data.pubDate.toISOString()}>
-                  {post.data.pubDate.toISOString().slice(0, 10)}
-                </time>
-              </div>
-              <h2><a href={post.id ? `/posts/${post.id}` : post.url}>{post.data.title}</a></h2>
-              <p>{post.data.description}</p>
-              {post.data.tags && (
-                <div class="post-tags">
-                  {post.data.tags.map((tag: string) => (
-                    <a href={`/tags/${tag}`}>#{tag}</a>
-                  ))}
-                </div>
-              )}
-            </article>
-          ))}
-        </div>
-      </section>
-    ))}
+    <PostTimelineList posts={allPosts} accordion={true} />
   </div>
 </BaseLayout>
 
@@ -70,72 +35,6 @@ for (const year of years) {
     margin-bottom: var(--space-xl);
     padding-bottom: var(--space-sm);
     border-bottom: 1px solid var(--color-border);
-  }
-
-  .year-group {
-    margin-bottom: var(--space-2xl);
-  }
-
-  .year-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--color-text);
-    margin-bottom: var(--space-lg);
-  }
-
-  .post-list { display: flex; flex-direction: column; gap: var(--space-lg); }
-  .post-card {
-    background: var(--color-surface);
-    border-radius: var(--radius-md);
-    padding: var(--space-lg);
-    border: 1px solid var(--color-border);
-    transition: border-color 0.2s, box-shadow 0.25s;
-  }
-  .post-card:hover {
-    border-color: var(--color-accent-muted);
-    box-shadow: 0 2px 20px oklch(0% 0 0 / 0.04);
-  }
-  .post-meta {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    font-size: 0.78rem;
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-xs);
-  }
-  .post-card h2 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
-    margin-bottom: var(--space-sm);
-  }
-  .post-card h2 a:hover {
-    color: var(--color-accent);
-  }
-  .post-card p {
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-  }
-  .post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-top: var(--space-md);
-  }
-  .post-tags a {
-    font-size: 0.72rem;
-    font-family: var(--font-mono);
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--radius-sm);
-    background: var(--color-tag-bg);
-    color: var(--color-text-secondary);
-    transition: background 0.2s, color 0.2s;
-  }
-  .post-tags a:hover {
-    background: var(--color-accent-soft);
-    color: var(--color-accent);
   }
 
   @media (max-width: 768px) {
