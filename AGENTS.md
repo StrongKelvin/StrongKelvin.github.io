@@ -1,40 +1,46 @@
-# Agents.md
+# AGENTS.md
 
-## 快速開始
+## 開發指令
 
 ```bash
-npm run dev      # 本地開發伺服器，位於 localhost:4321
-npm run build    # 建置到 dist/
-npm run preview  # 預覽 production 建置結果
+npm run dev      # 本機 dev server -> localhost:4321
+npm run build    # 靜態輸出至 dist/
+npm run preview  # 預覽 production build
 ```
 
-- **Node** >=22.12.0 必要。
-- 專案無測試、lint、格式化或型別檢查腳本。
+- Node >=22.12.0
+- 無測試、lint、格式化、型別檢查腳本
+- `astro check` 可經由 `npx astro check` 執行（需手動安裝 `@astrojs/check`）
 
-## 專案結構
+## 架構重點
 
-- `src/pages/` — 頁面路由（`index`、`about`、`blog`）+ `posts/` 內的 Markdown 文章
-- `src/layouts/` — `BaseLayout.astro`（主外殼）、`MarkdownPostLayout.astro`（文章包裝層）
-- `src/components/` — `Header`、`Footer`、`Navigation`、`Menu`、`Social`、`Welcome`
-- `src/styles/global.css` — 全域樣式
-- `src/scripts/menu.js` — 漢堡選單切換（客戶端 JS）
-- 純 Astro 6.x，無額外框架或整合。
+| 路徑 | 說明 |
+|---|---|
+| `src/pages/` | 路由頁面（index, blog, about, tags/, posts/\[...slug\]） |
+| `src/layouts/` | `BaseLayout.astro`（主外殼）、`MarkdownPostLayout.astro`（文章包裝） |
+| `src/components/` | Header, Footer, Sidebar, Profile, Giscus, BlogPost, Navigation, Menu, Social, Welcome, Greeting.jsx (Preact), ThemeIcon |
+| `src/content.config.ts` | Astro content collections 定義（`glob` 載入器讀取 `src/blog/**/[^_]*.md`） |
+| `src/blog/` | 所有 Markdown 文章依年份分目錄存放（2019 ~ 2026） |
 
-## 內容與部落格
+整合：`@astrojs/preact` + `astro-icon`。JSX 使用 Preact（`tsconfig.json` 設定）。
 
-- 文章位於 `src/pages/posts/` 目錄，使用 `.md` 檔案並附 frontmatter。
-- Frontmatter 必須包含：`layout`、`title`、`pubDate`、`author`、`description`、`image`（含 `url` + `alt`）、`tags`。
-- 頂層文章使用 `../../layouts/MarkdownPostLayout.astro` 作為 `layout`，子目錄內的文章使用 `../../../layouts/...`。
-- 部落格列表使用 `import.meta.glob('./posts/**/*.md', { eager: true })`，會遞迴匹配所有巢狀子目錄的文章，並以目錄名稱（年份）分組顯示。
+## 部落格須知
 
-## 已知問題
+- **文章前端資料**須包含：`layout`、`title`、`pubDate`、`author`、`description`、`image`（`url` + `alt`）、`tags`。
+- `layout` 路徑取決於文章深度：`src/blog/2025/foo.md` 用 `../../layouts/...`，`src/blog/2025/sub/bar.md` 用 `../../../layouts/...`。
+- 文章路由為 `/posts/{id}`（由 `src/content.config.ts` 中的檔案相對路徑決定 id）。
+- 所有頁面透過 `getCollection('blog')` 讀取內容；**唯獨 `src/pages/tags/index.astro` 尚未遷移**，仍使用舊的 `import.meta.glob`（參考 `src/pages/tags/[tag].astro` 的新寫法）。
+- Giscus 評論元件掛在 `MarkdownPostLayout` 中。
 
-- `src/pages/about.astro:32` — `var(--frontWeith)` 為筆誤，應為 `var(--fontWeight)`；CSS 變數名稱不符。
+## CI/CD
+
+- GitHub Actions（`.github/workflows/deploy.yml`）：push 到 `main` 分支時自動建置並部署到 GitHub Pages。
 
 ## 語言
 
-- 網站語言為**繁體中文**。頁面內容、UI 標籤及導覽皆使用中文。
+- 全站使用**繁體中文**。
 
-## 編輯器
+## VSCode
 
-- VSCode：推薦擴充功能為 `astro-build.astro-vscode`。Launch config 可啟動 `astro dev`。
+- 推薦擴充：`astro-build.astro-vscode`
+- Launch config 可直接啟動 `astro dev`

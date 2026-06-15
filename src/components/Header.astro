@@ -1,3 +1,7 @@
+---
+import ThemeIcon from './ThemeIcon.astro';
+---
+
 <nav class="nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">泥巴人</a>
@@ -12,6 +16,7 @@
       <span>搜尋文章...</span>
     </a>
   </div>
+  <div class="nav-theme-toggle"><ThemeIcon /></div>
 </nav>
 
 <style>
@@ -19,9 +24,15 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: oklch(100% 0 0 / 0.82);
+    background: var(--color-surface);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
+  }
+  .nav-theme-toggle {
+    position: absolute;
+    right: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
   }
   .nav-inner {
     max-width: var(--max-width);
