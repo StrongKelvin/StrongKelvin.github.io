@@ -1,14 +1,15 @@
 ---
 const { allPosts, allTags } = Astro.props;
 
-const categories = [
-  { name: 'C#', slug: 'csharp' },
-  { name: 'Web', slug: 'web' },
-  { name: 'AI', slug: 'ai' },
-  { name: 'Arduino', slug: 'arduino' },
-  { name: 'Raspberry Pi', slug: 'raspberry-pi' },
-  { name: '音響改裝', slug: 'audio' },
-];
+const tagCountMap = new Map();
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    tagCountMap.set(tag, (tagCountMap.get(tag) || 0) + 1);
+  }
+}
+const categories = [...tagCountMap.entries()]
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 ---
 
 <aside class="sidebar">
@@ -17,11 +18,9 @@ const categories = [
     <ul class="cat-list">
       {categories.map((cat) => (
         <li>
-          <a href={`/tags/${cat.slug}`}>
+          <a href={`/tags/${cat.name}`}>
             {cat.name}
-            <span class="count">
-              {allPosts.filter(p => p.data.tags.some(t => t.toLowerCase() === cat.slug)).length}
-            </span>
+            <span class="count">{cat.count}</span>
           </a>
         </li>
       ))}
