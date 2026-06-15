@@ -1,4 +1,6 @@
 ---
+import CategoryCard from './CategoryCard.jsx';
+
 const { allPosts, allTags } = Astro.props;
 
 const tagCountMap = new Map();
@@ -8,24 +10,11 @@ for (const post of allPosts) {
   }
 }
 const categories = [...tagCountMap.entries()]
-  .map(([name, count]) => ({ name, count }))
-  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  .map(([name, count]) => ({ name, count }));
 ---
 
 <aside class="sidebar">
-  <div class="widget">
-    <h3 class="widget-title">分類</h3>
-    <ul class="cat-list">
-      {categories.map((cat) => (
-        <li>
-          <a href={`/tags/${cat.name}`}>
-            {cat.name}
-            <span class="count">{cat.count}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
+  <CategoryCard categories={categories} client:load />
 
   <div class="widget">
     <h3 class="widget-title">標籤</h3>
@@ -61,25 +50,6 @@ const categories = [...tagCountMap.entries()]
     text-transform: uppercase;
     color: var(--color-text-secondary);
     margin-bottom: var(--space-md);
-  }
-  .cat-list { display: flex; flex-direction: column; gap: var(--space-xs); }
-  .cat-list li a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-    padding: var(--space-sm) 0;
-    transition: color 0.2s;
-  }
-  .cat-list li a:hover { color: var(--color-accent); }
-  .cat-list .count {
-    font-size: 0.72rem;
-    font-family: var(--font-mono);
-    color: var(--color-text-secondary);
-    background: var(--color-bg);
-    padding: 0.1rem 0.45rem;
-    border-radius: var(--radius-sm);
   }
   .tag-cloud {
     display: flex;
