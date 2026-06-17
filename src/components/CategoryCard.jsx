@@ -74,7 +74,7 @@ export default function CategoryCard({ categories }) {
         {sorted.map(cat => (
           <li key={cat.name}>
             <a
-              href={`/tags/${cat.name}`}
+              href={`/tags/${encodeURIComponent(cat.name)}`}
               class="cat-link"
               style={{
                 display: 'flex',
