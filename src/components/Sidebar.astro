@@ -20,7 +20,7 @@ const categories = [...tagCountMap.entries()]
     <h3 class="widget-title">標籤</h3>
     <div class="tag-cloud">
       {allTags.map((tag) => (
-        <a href={`/tags/${tag}`}>{tag}</a>
+        <a href={`/tags/${encodeURIComponent(tag)}`}>{tag}</a>
       ))}
     </div>
   </div>
