@@ -45,7 +45,7 @@ const categories = [
               {post.data.tags && (
                 <div class="post-tags">
                   {post.data.tags.map((tag) => (
-                    <a href={`/tags/${tag}`}>#{tag}</a>
+                    <a href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>
                   ))}
                 </div>
               )}
